@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        MSG-CON10 - Subchefia de Organização do Comando de Operações Navais
+    </title>
+
+
+    <!-- BOOTSTRAP -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+
+    <style>
+
+        /* =========================
+           PÁGINA
+        ========================= */
+
+        body {
+            background: #f4f6f9;
+        }
+
+
+        /* =========================
+           BARRA SUPERIOR
+        ========================= */
+
+        .navbar {
+            background: #0d3b66;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+
+        .card-total {
+            border-left: 5px solid #0d6efd;
+        }
+
+        .card-vencidas {
+            border-left: 5px solid #dc3545;
+        }
+
+        .card-atencao {
+            border-left: 5px solid #ffc107;
+        }
+
+        .card-PRAZO {
+            border-left: 5px solid #198754;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .badge-vencida {
+            background: #dc3545;
+        }
+
+        .badge-atencao {
+            background: #ffc107;
+            color: black;
+        }
+
+        .badge-ok {
+            background: #198754;
+        }
+
+
+        /* =========================
+           TABELAS
+        ========================= */
+
+        .table {
+            background: white;
+        }
+
+        #tabela,
+        #tabelaDespachos {
+            border-collapse: collapse;
+            border: 1px solid #000;
+        }
+
+        #tabela th,
+        #tabela td,
+        #tabelaDespachos th,
+        #tabelaDespachos td {
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #000;
+        }
+
+
+        /* =========================
+           ASSUNTO
+           Fica alinhado à esquerda
+        ========================= */
+
+        #tabela th:nth-child(3),
+        #tabela td:nth-child(3) {
+            text-align: left;
+        }
+
+
+        /* =========================
+           OBSERVAÇÃO
+        ========================= */
+
+        #tabela th:nth-child(6),
+        #tabela td:nth-child(6) {
+            min-width: 200px;
+        }
+
+
+        /* =========================
+           TABELA DE DESPACHOS
+           Impede a tabela de sair
+           da largura da página
+        ========================= */
+
+        #tabelaDespachos {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        #tabelaDespachos th,
+        #tabelaDespachos td {
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #000;
+
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+
+        /* =========================
+           LARGURA DAS COLUNAS
+        ========================= */
+
+        #tabelaDespachos th:nth-child(1),
+        #tabelaDespachos td:nth-child(1) {
+            width: 40%;
+        }
+
+        #tabelaDespachos th:nth-child(2),
+        #tabelaDespachos td:nth-child(2) {
+            width: 30%;
+        }
+
+        #tabelaDespachos th:nth-child(3),
+        #tabelaDespachos td:nth-child(3) {
+            width: 30%;
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           CAIXA DE PESQUISA
+        ========================= */
+
+        .search-box {
+            max-width: 350px;
+        }
+
+
+        /* =========================
+           RODAPÉ
+        ========================= */
+
+        footer {
+            color: gray;
+            font-size: 12px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     BARRA SUPERIOR
+========================================================= -->
+
+<nav class="navbar shadow-sm">
+
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+
+
+        <!-- LOGO ESQUERDA -->
+
+        <img src="{{ url_for('static', filename='logo_esquerdo.jpeg') }}"
+             height="70"
+             alt="Logo Esquerda">
+
+
+        <!-- TÍTULO -->
+
+        <div class="text-center text-white">
+
+            <div style="
+                font-size: 1.5rem;
+                font-weight: 600;
+            ">
+
+                📬 MSG-CON - Controle de Mensagens
+
+            </div>
+
+
+            <small style="
+                display: block;
+                font-size: 1rem;
+                font-weight: 400;
+            ">
+
+                Subchefia de Organização do Comando de Operações Navais
+
+            </small>
+
+        </div>
+
+
+        <!-- LOGO DIREITA -->
+
+        <img src="{{ url_for('static', filename='logo_direito.jpeg') }}"
+             height="80"
+             alt="Logo Direita">
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     CONTEÚDO PRINCIPAL
+========================================================= -->
+
+<div class="container mt-4">
+
+
+    <!-- =====================================================
+         CARDS
+    ====================================================== -->
+
+    <div class="row g-3">
+
+
+        <!-- TOTAL -->
+
+        <div class="col-md-3">
+
+            <div class="card card-total shadow-sm">
+
+                <div class="card-body">
+
+                    <h6>Total</h6>
+
+                    <h2>
+                        {{ total }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- VENCIDAS -->
+
+        <div class="col-md-3">
+
+            <div class="card card-vencidas shadow-sm">
+
+                <div class="card-body">
+
+                    <h6>Vencidas</h6>
+
+                    <h2>
+                        {{ vencidas }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ATENÇÃO -->
+
+        <div class="col-md-3">
+
+            <div class="card card-atencao shadow-sm">
+
+                <div class="card-body">
+
+                    <h6>Atenção</h6>
+
+                    <h2>
+                        {{ atencao }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NO PRAZO -->
+
+        <div class="col-md-3">
+
+            <div class="card card-PRAZO shadow-sm">
+
+                <div class="card-body">
+
+                    <h6>No PRAZO</h6>
+
+                    <h2>
+                        {{ prazo }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TABELA DE MENSAGENS
+    ====================================================== -->
+
+    <div class="card shadow-sm mt-4">
+
+        <div class="card-body">
+
+
+            <!-- TÍTULO CENTRALIZADO E PESQUISA -->
+
+            <div class="position-relative mb-3">
+
+                <h4 class="text-center">
+                    Mensagens e Documentos
+                </h4>
+
+
+                <input type="text"
+                       id="pesquisa"
+                       class="form-control search-box position-absolute top-0 end-0"
+                       placeholder="Pesquisar...">
+
+            </div>
+
+
+            <!-- TABELA -->
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle"
+                       id="tabela">
+
+
+                    <!-- CABEÇALHO -->
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>Data-Hora ou NUP</th>
+
+                            <th>Origem</th>
+
+                            <th>Assunto</th>
+
+                            <th>Divisão Responsável</th>
+
+                            <th>Prazo</th>
+
+                            <th>Observação</th>
+
+                            <th>Status</th>
+
+                            <th>Dias</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <!-- CORPO -->
+
+                    <tbody>
+
+
+                        {% for msg in mensagens %}
+
+                        <tr>
+
+
+                            <!-- DATA-HORA -->
+
+                            <td>
+                                {{ msg['Data-hora'] }}
+                            </td>
+
+
+                            <!-- ORIGEM -->
+
+                            <td>
+                                {{ msg['Origem'] }}
+                            </td>
+
+
+                            <!-- ASSUNTO -->
+
+                            <td>
+                                {{ msg['Assunto'] }}
+                            </td>
+
+
+                            <!-- DIVISÃO RESPONSÁVEL -->
+
+                            <td>
+                                {{ msg['Divisão Responsável'] }}
+                            </td>
+
+
+                            <!-- PRAZO -->
+
+                            <td>
+
+                                {% if msg['Prazo'] == msg['Prazo'] %}
+
+                                    {{ msg['Prazo'].strftime('%d/%m/%Y') }}
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- OBSERVAÇÃO -->
+
+                            <td>
+
+                                {% if msg['Observação'] == msg['Observação'] %}
+
+                                    {{ msg['Observação'] }}
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                {% if msg['DIAS_RESTANTES'] < 0 %}
+
+                                    <span class="badge badge-vencida">
+                                        Vencida
+                                    </span>
+
+                                {% elif msg['DIAS_RESTANTES'] <= 3 %}
+
+                                    <span class="badge badge-atencao">
+                                        Atenção
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge badge-ok">
+                                        No PRAZO
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- DIAS -->
+
+                            <td>
+                                {{ msg['DIAS_RESTANTES'] }}
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HORÁRIOS DE DESPACHO COM O ALMIRANTE
+    ====================================================== -->
+
+    <div class="card shadow-sm mt-4">
+
+        <div class="card-body">
+
+
+            <!-- TÍTULO CENTRALIZADO -->
+
+            <div class="mb-3">
+
+                <h4 class="text-center">
+                    Horários de Despacho com o Almirante
+                </h4>
+
+            </div>
+
+
+            <!-- TABELA DE DESPACHOS -->
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle"
+                       id="tabelaDespachos">
+
+
+                    <!-- CABEÇALHO -->
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>
+                                Setor
+                            </th>
+
+                            <th>
+                                Dia
+                            </th>
+
+                            <th>
+                                Horário do Despacho
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <!-- CORPO -->
+
+                    <tbody>
+
+
+                        {% for despacho in horarios_despacho %}
+
+                        <tr>
+
+
+                            <!-- SETOR -->
+
+                            <td>
+                                {{ despacho['Setor'] }}
+                            </td>
+
+
+                            <!-- DIA -->
+
+                            <td>
+
+                                {% if despacho['Dia'] == despacho['Dia'] %}
+
+                                    {{ despacho['Dia'].strftime('%d/%m/%Y') }}
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- HORÁRIO -->
+
+                            <td>
+
+                                {{ despacho['Horário do Despacho'] }}
+
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         RODAPÉ
+    ====================================================== -->
+
+    <footer class="text-center mt-4 mb-3">
+
+        Sistema de Controle de Mensagens
+
+    </footer>
+
+
+</div>
+
+
+<!-- =========================================================
+     PESQUISA DAS MENSAGENS
+========================================================= -->
+
+<script>
+
+    const pesquisa =
+        document.getElementById("pesquisa");
+
+
+    pesquisa.addEventListener(
+        "keyup",
+        function() {
+
+
+            let filtro =
+                pesquisa.value.toLowerCase();
+
+
+            let linhas =
+                document.querySelectorAll(
+                    "#tabela tbody tr"
+                );
+
+
+            linhas.forEach(
+                function(linha) {
+
+
+                    let texto =
+                        linha.innerText.toLowerCase();
+
+
+                    linha.style.display =
+                        texto.includes(filtro)
+                        ? ""
+                        : "none";
+
+
+                }
+            );
+
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
+
+
