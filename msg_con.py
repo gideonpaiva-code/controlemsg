@@ -4,7 +4,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-ARQUIVO = "/home/silvapaiva/Documentos/curso/python/CON.ods"
+ARQUIVO = "CON.ods"
 
 
 # =========================================================
